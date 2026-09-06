@@ -24,7 +24,9 @@ export interface AIComplianceInput {
   extractedData: Record<string, unknown>;
 }
 
-const AI_BACKEND_URL = "http://localhost:3001";
+// const AI_BACKEND_URL = "http://localhost:3001";
+const AI_BACKEND_URL =
+  import.meta.env.VITE_AI_BACKEND_URL || "http://localhost:3001";
 
 export async function analyzeCompliance(
   input: AIComplianceInput,

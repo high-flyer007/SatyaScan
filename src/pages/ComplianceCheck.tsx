@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState} from "react";
+import { useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -13,19 +13,10 @@ import {
 import { useInspections } from "../context/InspectionContext";
 import {
   evaluateCompliance,
-  type ComplianceStatus,
 } from "../services/complianceEngine";
 
 type FindingStatus = "PASS" | "FAIL" | "REVIEW";
 
-interface Finding {
-  field: string;
-  name: string;
-  value: string;
-  status: FindingStatus;
-  reference: string;
-  description: string;
-}
 
 function StatusBadge({ status }: { status: FindingStatus }) {
   if (status === "PASS") {
