@@ -9,6 +9,15 @@ import ReviewVerify from './pages/ReviewVerify'
 import Report from './pages/Report'
 import History from './pages/History'
 import Login from './pages/Login'
+import ActiveInspections from './pages/ActiveInspections'
+import Products from './pages/Products'
+import Manufacturers from './pages/Manufacturers'
+import Reports from './pages/Reports'
+import Analytics from './pages/Analytics'
+import RulesCompliance from './pages/RulesCompliance'
+import Users from './pages/Users'
+import AuditLog from './pages/AuditLog'
+import Settings from './pages/Settings'
 
 function Placeholder({
   title,
@@ -68,12 +77,7 @@ function AppPages() {
 
         <Route
           path="/inspection/active"
-          element={
-            <Placeholder
-              title="Active Inspections"
-              description="Monitor inspections currently awaiting review."
-            />
-          }
+          element={<ActiveInspections />}
         />
 
         <Route
@@ -103,85 +107,24 @@ function AppPages() {
 
         <Route path="/history" element={<History />} />
 
-        <Route
-          path="/products"
-          element={
-            <Placeholder
-              title="Product Repository"
-              description="Product records and inspection history will appear here."
-            />
-          }
-        />
+        <Route path="/products" element={<Products />} /> 
 
         <Route
           path="/manufacturers"
-          element={
-            <Placeholder
-              title="Manufacturers"
-              description="Manufacturer records will appear here."
-            />
-          }
+          element={<Manufacturers />}
         />
 
-        <Route
-          path="/reports"
-          element={
-            <Placeholder
-              title="Reports"
-              description="Compliance and inspection reports will appear here."
-            />
-          }
-        />
+        <Route path="/reports" element={<Reports />} />
 
-        <Route
-          path="/analytics"
-          element={
-            <Placeholder
-              title="Analytics"
-              description="Compliance analytics will appear here."
-            />
-          }
-        />
+        <Route path="/analytics" element={<Analytics />} />
 
-        <Route
-          path="/rules"
-          element={
-            <Placeholder
-              title="Rules & Compliance"
-              description="Legal Metrology rules and validation logic will appear here."
-            />
-          }
-        />
+        <Route path="/rules" element={<RulesCompliance />} />
 
-        <Route
-          path="/users"
-          element={
-            <Placeholder
-              title="Users"
-              description="System users and access management will appear here."
-            />
-          }
-        />
+        <Route path="/users" element={<Users />} />
 
-        <Route
-          path="/audit-log"
-          element={
-            <Placeholder
-              title="Audit Log"
-              description="SatyaScan activity and verification history will appear here."
-            />
-          }
-        />
+        <Route path="/audit-log" element={<AuditLog />} />
 
-        <Route
-          path="/settings"
-          element={
-            <Placeholder
-              title="Settings"
-              description="SatyaScan configuration will appear here."
-            />
-          }
-        />
+        <Route path="/settings" element={<Settings />} />
 
         <Route
           path="/help"

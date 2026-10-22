@@ -7,7 +7,7 @@ import {
   Plus,
   Upload,
 } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useInspections } from '../context/InspectionContext'
 import { saveInspectionImage } from '../services/imageStorage'
@@ -19,6 +19,15 @@ interface ProductImage {
   type: 'front' | 'back' | 'side' | 'other'
 }
 
+interface SatyaScanPreferences {
+  defaultLocation?: string
+  defaultInspector?: string
+  dateFormat?: 'local' | 'iso'
+  compactTable?: boolean
+}
+
+const PREFERENCES_KEY = 'satyascan_preferences'
+
 export default function NewInspection() {
   const navigate = useNavigate()
   const { createInspection, updateInspection} = useInspections()
@@ -28,7 +37,22 @@ export default function NewInspection() {
   const [productName, setProductName] = useState('')
   const [manufacturer, setManufacturer] = useState('')
   const [location, setLocation] = useState('Pune')
-  const [inspector, setInspector] = useState('Alex Officer')
+  const [inspector, setInspector] = useState('')
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(PREFERENCES_KEY)
+
+      if (!stored) return
+
+      const preferences = JSON.parse(stored) as SatyaScanPreferences
+
+      setLocation(preferences.defaultLocation || 'Pune')
+      setInspector(preferences.defaultInspector || '')
+    } catch (error) {
+      console.error('Unable to load SatyaScan preferences:', error)
+    }
+  }, [])
 
   const handleFiles = (files: FileList | null) => {
   if (!files) return

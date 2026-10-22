@@ -18,6 +18,45 @@ export default function History() {
   const [searchTerm, setSearchTerm] = React.useState('')
   const [statusFilter, setStatusFilter] = React.useState('ALL')
 
+  React.useEffect(() => {
+    try {
+      const stored = localStorage.getItem('satyascan_preferences')
+
+      if (stored) {
+        JSON.parse(stored)
+      }
+    } catch (error) {
+      console.error('Unable to load date format preference:', error)
+    }
+  }, [])
+
+  const formatInspectionDate = (date: string) => {
+    const parsedDate = new Date(date)
+
+    if (Number.isNaN(parsedDate.getTime())) return '—'
+
+    try {
+      const stored = localStorage.getItem('satyascan_preferences')
+      const preferences = stored ? JSON.parse(stored) : null
+
+      if (preferences?.dateFormat === 'iso') {
+        const year = parsedDate.getFullYear()
+        const month = String(parsedDate.getMonth() + 1).padStart(2, '0')
+        const day = String(parsedDate.getDate()).padStart(2, '0')
+
+        return `${year}-${month}-${day}`
+      }
+    } catch {
+      // Fall back to the local date format.
+    }
+
+    return parsedDate.toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    })
+  }
+
   const filteredInspections = inspections.filter((inspection) => {
     const search = searchTerm.toLowerCase()
 
@@ -173,14 +212,7 @@ export default function History() {
                 </span>
 
                 <span className="text-sm text-slate-500">
-                  {new Date(inspection.date).toLocaleDateString(
-                    'en-IN',
-                    {
-                      day: '2-digit',
-                      month: 'short',
-                      year: 'numeric',
-                    },
-                  )}
+                  {formatInspectionDate(inspection.date)}
                 </span>
 
                 <span
