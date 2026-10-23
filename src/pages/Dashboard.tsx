@@ -28,19 +28,23 @@ function SeverityBadge({
   severity: 'Critical' | 'High' | 'Medium'
 }) {
   const styles = {
-    Critical: 'bg-red-50 text-red-700 border-red-200',
-    High: 'bg-orange-50 text-orange-700 border-orange-200',
-    Medium: 'bg-blue-50 text-blue-700 border-blue-200',
+    Critical:
+      'bg-red-50 text-red-700 border-red-200',
+    High:
+      'bg-orange-50 text-orange-700 border-orange-200',
+    Medium:
+      'bg-amber-50 text-amber-700 border-amber-200',
   }
 
   return (
     <span
-      className={`inline-flex rounded-md border px-2 py-1 text-[11px] font-semibold ${styles[severity]}`}
+      className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${styles[severity]}`}
     >
       {severity}
     </span>
   )
 }
+
 
 function StatCard({
   title,
@@ -48,42 +52,77 @@ function StatCard({
   icon,
   children,
   danger = false,
+  accent = 'blue',
 }: {
   title: string
   value: number
   icon: React.ReactNode
   children: React.ReactNode
   danger?: boolean
+  accent?: 'blue' | 'green' | 'amber'
 }) {
+  const themes = {
+    blue: {
+      border: 'border-t-blue-500',
+      icon: 'bg-blue-50 text-blue-600 ring-blue-100',
+      glow: 'group-hover:shadow-blue-100/70',
+    },
+    green: {
+      border: 'border-t-emerald-500',
+      icon: 'bg-emerald-50 text-emerald-600 ring-emerald-100',
+      glow: 'group-hover:shadow-emerald-100/70',
+    },
+    amber: {
+      border: 'border-t-amber-500',
+      icon: 'bg-amber-50 text-amber-600 ring-amber-100',
+      glow: 'group-hover:shadow-amber-100/70',
+    },
+  }
+
+  const theme = themes[accent]
+
   return (
     <div
-      className={`rounded-xl border bg-white p-5 ${
-        danger ? 'border-red-200' : 'border-slate-200'
-      }`}
+      className={[
+        'group relative overflow-hidden rounded-2xl border border-t-[3px] bg-white p-5',
+        'transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
+        danger
+          ? 'border-x-red-200 border-b-red-200 border-t-red-500 hover:shadow-red-100/70'
+          : `border-x-slate-200 border-b-slate-200 ${theme.border} ${theme.glow}`,
+      ].join(' ')}
     >
-      <div className="flex items-start justify-between">
+      <div
+        className={[
+          'pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100',
+          danger ? 'bg-red-200' : accent === 'green' ? 'bg-emerald-200' : accent === 'amber' ? 'bg-amber-200' : 'bg-blue-200',
+        ].join(' ')}
+      />
+
+      <div className="relative flex items-start justify-between gap-3">
         <p className="text-sm font-medium text-slate-600">{title}</p>
 
         <div
-          className={`flex h-8 w-8 items-center justify-center rounded-lg ${
-            danger
-              ? 'bg-red-50 text-red-600'
-              : 'bg-slate-50 text-slate-600'
-          }`}
+          className={[
+            'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 ring-inset transition-transform duration-300 group-hover:scale-110',
+            danger ? 'bg-red-50 text-red-600 ring-red-100' : theme.icon,
+          ].join(' ')}
         >
           {icon}
         </div>
       </div>
 
       <div
-        className={`mt-3 text-[30px] font-bold tracking-tight ${
-          danger ? 'text-red-600' : 'text-[#0B2347]'
-        }`}
+        className={[
+          'relative mt-4 text-4xl font-bold tracking-tight tabular-nums',
+          danger ? 'text-red-600' : 'text-[#0B2347]',
+        ].join(' ')}
       >
         {value.toLocaleString()}
       </div>
 
-      <div className="mt-1 text-xs text-slate-500">{children}</div>
+      <div className="relative mt-2 text-xs leading-5 text-slate-500">
+        {children}
+      </div>
     </div>
   )
 }
@@ -321,9 +360,9 @@ export default function Dashboard() {
                 onClick={() =>
                   navigate(`/inspection/${review.id}`)
                 }
-                className="grid w-full grid-cols-[120px_1.2fr_1.2fr_120px_90px] gap-3 border-b border-slate-100 px-4 py-4 text-left transition last:border-b-0 hover:bg-slate-50"
+                className="group grid w-full grid-cols-[120px_1.2fr_1.2fr_120px_90px] gap-3 border-b border-slate-100 px-4 py-4 text-left transition-colors duration-200 last:border-b-0 hover:bg-blue-50/60"
               >
-                <span className="text-sm font-semibold text-[#0B4A8B]">
+                <span className="text-sm font-semibold text-[#0B4A8B] transition-colors group-hover:text-blue-700">
                   {review.id}
                 </span>
 
@@ -428,21 +467,45 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="mt-5 flex h-[130px] items-end gap-2">
-              {complianceTrend.map((value, index) => (
-                <div
-                  key={index}
-                  className="group relative flex h-full flex-1 items-end"
-                >
+            
+            <div className="mt-6">
+              <div className="flex h-[145px] items-end gap-2 border-b border-slate-100 pb-0">
+                {complianceTrend.map((value, index) => (
                   <div
-                    className="w-full rounded-t-md bg-blue-100 transition group-hover:bg-blue-200"
-                    style={{
-                      height: `${value * 1.15}%`,
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
+                    key={index}
+                    className="group relative flex h-full flex-1 items-end justify-center"
+                  >
+                    <div className="pointer-events-none absolute bottom-full z-10 mb-2 whitespace-nowrap rounded-lg bg-[#102A4C] px-2.5 py-1.5 text-xs font-semibold text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
+                      {value}% compliance
+                    </div>
+
+                    <div
+                      className={[
+                        'w-full max-w-8 rounded-t-lg transition-all duration-300 group-hover:brightness-95',
+                        value >= 80
+                          ? 'bg-gradient-to-t from-emerald-600 to-emerald-400'
+                          : value >= 50
+                            ? 'bg-gradient-to-t from-blue-700 to-sky-400'
+                            : 'bg-gradient-to-t from-amber-500 to-orange-300',
+                      ].join(' ')}
+                      style={{
+                        height: `${Math.max(6, Math.min(100, value))}%`,
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+  <div className="mt-2 flex justify-between text-[10px] text-slate-400">
+    {complianceTrend.map((_, index) => (
+      <span key={index} className="flex-1 text-center">
+        {complianceTrend.length > 1
+          ? `#${index + 1}`
+          : 'Latest'}
+      </span>
+    ))}
+  </div>
+</div>
           </div>
 
           {/* Violation distribution */}

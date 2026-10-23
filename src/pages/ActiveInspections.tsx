@@ -36,7 +36,7 @@ export default function ActiveInspections() {
   }, [inspections, search])
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-6 py-6 lg:px-8">
       <div>
         <h1 className="text-3xl font-bold text-slate-900">
           Active Inspections
@@ -88,7 +88,7 @@ export default function ActiveInspections() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-slate-200 text-xs uppercase text-slate-500">
+                <tr className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
                   <th className="px-3 py-4">Inspection ID</th>
                   <th className="px-3 py-4">Product</th>
                   <th className="px-3 py-4">Manufacturer</th>
@@ -102,7 +102,7 @@ export default function ActiveInspections() {
                 {activeInspections.map((inspection) => (
                   <tr
                     key={inspection.id}
-                    className="border-b border-slate-100 last:border-0 hover:bg-slate-50"
+                    className="border-b border-slate-100 transition-colors duration-150 last:border-0 hover:bg-blue-50/50"
                   >
                     <td className="whitespace-nowrap px-3 py-4 font-semibold text-blue-800">
                       {inspection.id}
@@ -117,7 +117,7 @@ export default function ActiveInspections() {
                       {inspection.location || '—'}
                     </td>
                     <td className="px-3 py-4">
-                      <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
+                      <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">
                         {inspection.status === 'analyzing'
                           ? 'Analyzing'
                           : inspection.status === 'draft'

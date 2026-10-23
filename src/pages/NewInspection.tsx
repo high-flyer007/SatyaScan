@@ -247,25 +247,35 @@ export default function NewInspection() {
           </div>
 
           {/* Drop zone */}
+          
           <button
+            type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="flex w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-10 transition hover:border-blue-400 hover:bg-blue-50/30"
+            className="group relative flex min-h-[210px] w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-blue-200 bg-gradient-to-br from-blue-50/80 via-white to-emerald-50/60 px-6 py-8 text-center transition-all duration-200 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-900/5"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm">
-              <Upload
-                size={22}
-                className="text-[#0B4A8B]"
-              />
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-100 bg-white text-[#0B4A8B] shadow-sm transition-transform duration-200 group-hover:-translate-y-1">
+              <Upload size={25} strokeWidth={1.8} />
             </div>
 
-            <p className="mt-4 text-sm font-semibold text-slate-700">
-              Click to upload product images
+            <p className="text-sm font-bold text-[#0B2347]">
+              Upload product packaging
             </p>
 
-            <p className="mt-1 text-xs text-slate-500">
-              PNG, JPG or JPEG • Multiple images supported
+            <p className="mt-2 max-w-xs text-xs leading-5 text-slate-500">
+              Add clear photos of the front, back and sides to help SatyaScan
+              extract product declarations.
+            </p>
+
+            <span className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#0B2347] px-4 py-2 text-xs font-semibold text-white shadow-sm transition group-hover:bg-[#12345F]">
+              <Plus size={15} />
+              Choose images
+            </span>
+
+            <p className="mt-3 text-[11px] text-slate-400">
+              PNG or JPG · Multiple images supported
             </p>
           </button>
+
 
           <input
             ref={fileInputRef}
@@ -277,40 +287,68 @@ export default function NewInspection() {
           />
 
           {/* Images */}
+          
           {images.length > 0 && (
-            <div className="mt-5 grid grid-cols-3 gap-3">
-              {images.map((image) => (
-                <div
-                  key={image.id}
-                  className="group relative overflow-hidden rounded-lg border border-slate-200"
-                >
-                  <img
-                    src={image.preview}
-                    alt="Product"
-                    className="h-28 w-full object-cover"
-                  />
+            <div className="mt-5">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-sm font-semibold text-[#0B2347]">
+                  Uploaded evidence
+                </p>
+                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-[#0B4A8B]">
+                  {images.length} {images.length === 1 ? 'image' : 'images'}
+                </span>
+              </div>
 
-                  <button
-                    onClick={() => removeImage(image.id)}
-                    className="absolute right-2 top-2 hidden rounded-md bg-red-600 px-2 py-1 text-xs font-semibold text-white group-hover:block"
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                {images.map((image, index) => (
+                  <div
+                    key={image.id}
+                    className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md"
                   >
-                    Remove
-                  </button>
+                    <div className="relative bg-slate-100">
+                      <img
+                        src={image.preview}
+                        alt={`Product evidence ${index + 1}`}
+                        className="h-32 w-full object-cover"
+                      />
 
-                  <div className="absolute bottom-0 left-0 right-0 bg-black/50 px-2 py-1 text-[10px] text-white">
-                    {image.type.toUpperCase()}
+                      <span className="absolute left-2 top-2 rounded-md bg-[#0B2347]/90 px-2 py-1 text-[10px] font-semibold tracking-wide text-white">
+                        {image.type.toUpperCase()}
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={() => removeImage(image.id)}
+                        aria-label={`Remove image ${index + 1}`}
+                        className="absolute right-2 top-2 rounded-md bg-white/95 px-2 py-1 text-xs font-semibold text-red-600 shadow-sm transition hover:bg-red-50"
+                      >
+                        Remove
+                      </button>
+                    </div>
+
+                    <div className="px-3 py-2.5">
+                      <p className="truncate text-xs font-medium text-slate-700">
+                        {image.file.name}
+                      </p>
+                      <p className="mt-1 text-[10px] text-slate-400">
+                        Evidence image {index + 1}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="flex h-28 items-center justify-center rounded-lg border border-dashed border-slate-300 text-slate-400 hover:bg-slate-50"
-              >
-                <Plus size={22} />
-              </button>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex min-h-[175px] flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 text-slate-500 transition hover:border-blue-300 hover:bg-blue-50/50 hover:text-[#0B4A8B]"
+                >
+                  <Plus size={22} />
+                  <span className="text-xs font-semibold">Add more images</span>
+                </button>
+              </div>
             </div>
           )}
+
 
           {images.length === 0 && (
             <div className="mt-5 flex items-center gap-3 rounded-lg bg-slate-50 p-3">
